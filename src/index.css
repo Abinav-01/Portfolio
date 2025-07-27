@@ -8,22 +8,22 @@
   }
   
   body {
-    @apply bg-slate-900 text-gray-100;
+    @apply bg-slate-900 text-slate-100;
     font-family: 'Inter', system-ui, sans-serif;
   }
   
   * {
-    @apply border-gray-700;
+    @apply border-slate-700;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
   
   .glass-dark {
-    @apply bg-gray-900/20 backdrop-blur-md border border-gray-700/30;
+    @apply bg-slate-800/80 backdrop-blur-md border border-slate-600/50;
   }
   
   .gradient-text {
@@ -35,11 +35,11 @@
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/10;
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20;
   }
   
   .button-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25;
+    @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30;
   }
   
   .button-secondary {
@@ -47,7 +47,7 @@
   }
   
   .section-padding {
-    @apply py-20 px-4 sm:px-6 lg:px-8;
+    @apply py-16 sm:py-20 px-4 sm:px-6 lg:px-8;
   }
   
   .container-custom {
@@ -56,6 +56,48 @@
   
   .grid-animation {
     animation: gridMove 20s linear infinite;
+  }
+
+  /* Mobile-first responsive utilities */
+  .mobile-text-center {
+    @apply text-center sm:text-left;
+  }
+  
+  .mobile-stack {
+    @apply flex flex-col sm:flex-row;
+  }
+  
+  .mobile-gap {
+    @apply gap-4 sm:gap-6 lg:gap-8;
+  }
+  
+  .mobile-padding {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  
+  .mobile-margin {
+    @apply mb-8 sm:mb-12 lg:mb-16;
+  }
+
+  /* High contrast text utilities */
+  .text-high-contrast {
+    @apply text-slate-900 dark:text-slate-100;
+  }
+  
+  .text-medium-contrast {
+    @apply text-slate-700 dark:text-slate-200;
+  }
+  
+  .text-low-contrast {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+  
+  .text-accent {
+    @apply text-purple-600 dark:text-purple-400;
+  }
+  
+  .text-accent-hover {
+    @apply text-purple-700 dark:text-purple-300;
   }
 }
 
@@ -129,4 +171,39 @@
 @keyframes gridMove {
   0% { transform: translate(0, 0); }
   100% { transform: translate(100px, 100px); }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  .mobile-text-lg {
+    @apply text-base;
+  }
+  
+  .mobile-text-xl {
+    @apply text-lg;
+  }
+  
+  .mobile-text-2xl {
+    @apply text-xl;
+  }
+  
+  .mobile-text-3xl {
+    @apply text-2xl;
+  }
+  
+  .mobile-text-4xl {
+    @apply text-3xl;
+  }
+  
+  .mobile-text-5xl {
+    @apply text-4xl;
+  }
+  
+  .mobile-text-6xl {
+    @apply text-5xl;
+  }
+  
+  .mobile-text-7xl {
+    @apply text-6xl;
+  }
 } 

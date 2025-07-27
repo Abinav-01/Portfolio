@@ -14,15 +14,54 @@ const Projects: React.FC = () => {
     { id: 'fullstack', name: 'Full Stack' },
   ];
 
-  const filteredProjects = filter === 'all' 
-    ? projects 
-    : filter === 'featured'
-    ? projects.filter(p => p.featured)
-    : projects.filter(p => 
-        filter === 'frontend' 
-          ? p.technologies.some(t => ['React', 'Vue', 'Angular', 'TypeScript'].includes(t))
-          : p.technologies.some(t => ['Node.js', 'Python', 'MongoDB', 'PostgreSQL'].includes(t))
-      );
+  // Improved filtering logic with better organization
+  const getFilteredProjects = () => {
+    switch (filter) {
+      case 'all':
+        return projects;
+      case 'featured':
+        return projects.filter(p => p.featured);
+      case 'frontend':
+        return projects.filter(p => 
+          p.technologies.some(t => 
+            ['React', 'Vue', 'Angular', 'TypeScript', 'HTML', 'CSS', 'JavaScript'].includes(t)
+          )
+        );
+      case 'fullstack':
+        return projects.filter(p => 
+          p.technologies.some(t => 
+            ['React', 'Vue', 'Flask', 'NestJS', 'Node.js', 'Python', 'MongoDB', 'SQLite', 'Prisma'].includes(t)
+          )
+        );
+      default:
+        return projects;
+    }
+  };
+
+  const getProjectCount = (filterId: string) => {
+    switch (filterId) {
+      case 'all':
+        return projects.length;
+      case 'featured':
+        return projects.filter(p => p.featured).length;
+      case 'frontend':
+        return projects.filter(p => 
+          p.technologies.some(t => 
+            ['React', 'Vue', 'Angular', 'TypeScript', 'HTML', 'CSS', 'JavaScript'].includes(t)
+          )
+        ).length;
+      case 'fullstack':
+        return projects.filter(p => 
+          p.technologies.some(t => 
+            ['React', 'Vue', 'Flask', 'NestJS', 'Node.js', 'Python', 'MongoDB', 'SQLite', 'Prisma'].includes(t)
+          )
+        ).length;
+      default:
+        return 0;
+    }
+  };
+
+  const filteredProjects = getFilteredProjects();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -46,7 +85,7 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="section-padding bg-gray-50 dark:bg-gray-800">
+    <section id="projects" className="section-padding bg-slate-900/50">
       <div className="container-custom">
         {/* Header */}
         <motion.div
@@ -54,12 +93,12 @@ const Projects: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mobile-margin"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+          <h2 className="mobile-text-4xl sm:text-5xl font-bold mb-4">
             My <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="mobile-text-lg text-slate-200 max-w-2xl mx-auto px-4">
             A showcase of my recent work, featuring web applications and projects that demonstrate my skills and creativity.
           </p>
         </motion.div>
@@ -70,135 +109,136 @@ const Projects: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
+          className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12 px-4"
         >
-          {filters.map((filterOption) => (
-            <motion.button
-              key={filterOption.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setFilter(filterOption.id)}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                filter === filterOption.id
-                  ? 'bg-primary-500 text-white shadow-lg'
-                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
-              }`}
-            >
-              <Filter size={16} />
-              <span>{filterOption.name}</span>
-            </motion.button>
-          ))}
+          {filters.map((filterOption) => {
+            const projectCount = getProjectCount(filterOption.id);
+
+            return (
+              <motion.button
+                key={filterOption.id}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setFilter(filterOption.id)}
+                className={`flex items-center space-x-2 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base ${
+                  filter === filterOption.id
+                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
+                    : 'bg-slate-700/80 text-slate-200 hover:bg-slate-600/80 border border-slate-600/50'
+                }`}
+              >
+                <Filter size={16} />
+                <span>{filterOption.name}</span>
+                <span className="ml-1 text-xs opacity-75">({projectCount})</span>
+              </motion.button>
+            );
+          })}
         </motion.div>
 
         {/* Projects Grid */}
         <motion.div
+          key={filter} // Add key to force re-render when filter changes
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4"
         >
-          {filteredProjects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
-            >
-              {/* Project Image */}
-              <div className="relative h-48 bg-gradient-to-br from-primary-100 to-purple-100 dark:from-gray-600 dark:to-gray-500 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-6xl font-bold text-white opacity-20">
-                    {project.title.split(' ').map(word => word[0]).join('')}
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="bg-slate-700/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-600/50 hover:border-purple-500/50"
+              >
+                {/* Project Image */}
+                <div className="relative h-48 bg-gradient-to-br from-purple-600/20 to-blue-600/20 flex items-center justify-center">
+                  <div className="w-16 h-16 gradient-bg rounded-full flex items-center justify-center">
+                    <Eye className="w-8 h-8 text-white" />
                   </div>
+                  {project.featured && (
+                    <div className="absolute top-4 right-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                      Featured
+                    </div>
+                  )}
                 </div>
-                
-                {/* Overlay Actions */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setSelectedProject(project)}
-                      className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
-                    >
-                      <Eye size={20} className="text-white" />
-                    </motion.button>
-                    {project.liveUrl && (
-                      <motion.a
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
-                      >
-                        <ExternalLink size={20} className="text-white" />
-                      </motion.a>
-                    )}
-                  </div>
-                </div>
-              </div>
 
-              {/* Project Content */}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors">
+                {/* Project Content */}
+                <div className="mobile-padding">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">
                     {project.title}
                   </h3>
-                  {project.featured && (
-                    <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-600 dark:bg-primary-900 dark:text-primary-300 rounded-full">
-                      Featured
-                    </span>
-                  )}
-                </div>
-                
-                <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
-                  {project.description}
-                </p>
+                  <p className="text-slate-200 text-sm mb-4 line-clamp-3">
+                    {project.description}
+                  </p>
 
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full"
+                  {/* Technologies */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.technologies.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-1 bg-purple-900/50 text-purple-300 text-xs rounded-full border border-purple-500/50"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies.length > 4 && (
+                      <span className="px-2 py-1 bg-slate-600/80 text-slate-300 text-xs rounded-full">
+                        +{project.technologies.length - 4} more
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Project Actions */}
+                  <div className="flex items-center justify-between">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedProject(project)}
+                      className="flex items-center space-x-2 text-purple-400 hover:text-purple-300 transition-colors"
                     >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <span className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full">
-                      +{project.technologies.length - 3}
-                    </span>
-                  )}
-                </div>
+                      <Eye size={16} />
+                      <span className="text-sm font-medium">View Details</span>
+                    </motion.button>
 
-                {/* Action Buttons */}
-                <div className="flex space-x-3">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedProject(project)}
-                    className="flex-1 button-secondary text-sm py-2"
-                  >
-                    View Details
-                  </motion.button>
-                  <motion.a
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 rounded-lg transition-colors"
-                  >
-                    <Github size={16} />
-                  </motion.a>
+                    <div className="flex items-center space-x-2">
+                      {project.githubUrl && (
+                        <motion.a
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-slate-600/80 hover:bg-slate-500/80 rounded-lg transition-colors"
+                        >
+                          <Github size={16} className="text-slate-200" />
+                        </motion.a>
+                      )}
+                      {project.liveUrl && (
+                        <motion.a
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-slate-600/80 hover:bg-slate-500/80 rounded-lg transition-colors"
+                        >
+                          <ExternalLink size={16} className="text-slate-200" />
+                        </motion.a>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="col-span-full text-center py-12"
+            >
+              <p className="text-slate-400 text-lg">No projects found for this category.</p>
             </motion.div>
-          ))}
+          )}
         </motion.div>
 
         {/* Project Modal */}
@@ -208,60 +248,52 @@ const Projects: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
               onClick={() => setSelectedProject(null)}
             >
               <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
               >
                 {/* Modal Header */}
-                <div className="relative h-64 bg-gradient-to-br from-primary-100 to-purple-100 dark:from-gray-600 dark:to-gray-500">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-8xl font-bold text-white opacity-20">
-                      {selectedProject.title.split(' ').map(word => word[0]).join('')}
-                    </div>
+                <div className="p-4 sm:p-6 border-b border-slate-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">
+                      {selectedProject.title}
+                    </h2>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setSelectedProject(null)}
+                      className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                    >
+                      <X size={24} className="text-slate-400" />
+                    </motion.button>
                   </div>
-                  
-                  <button
-                    onClick={() => setSelectedProject(null)}
-                    className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
-                  >
-                    <X size={20} className="text-white" />
-                  </button>
+                  {selectedProject.featured && (
+                    <span className="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                      Featured Project
+                    </span>
+                  )}
                 </div>
 
                 {/* Modal Content */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {selectedProject.title}
-                    </h2>
-                    {selectedProject.featured && (
-                      <span className="px-3 py-1 text-sm font-medium bg-primary-100 text-primary-600 dark:bg-primary-900 dark:text-primary-300 rounded-full">
-                        Featured
-                      </span>
-                    )}
-                  </div>
-                  
-                  <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                <div className="p-4 sm:p-6">
+                  <p className="text-slate-200 mb-6 leading-relaxed text-sm sm:text-base">
                     {selectedProject.description}
                   </p>
 
                   {/* Technologies */}
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                      Technologies Used
-                    </h3>
+                    <h3 className="text-lg font-semibold text-white mb-3">Technologies Used</h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedProject.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full"
+                          className="px-3 py-1 bg-purple-900/50 text-purple-300 text-sm rounded-full border border-purple-500/50"
                         >
                           {tech}
                         </span>
@@ -269,31 +301,32 @@ const Projects: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <motion.a
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      href={selectedProject.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="button-primary flex items-center justify-center space-x-2"
-                    >
-                      <Github size={20} />
-                      <span>View Code</span>
-                    </motion.a>
-                    
+                  {/* Project Links */}
+                  <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                    {selectedProject.githubUrl && (
+                      <motion.a
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        href={selectedProject.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors w-full sm:w-auto justify-center"
+                      >
+                        <Github size={16} className="text-slate-200" />
+                        <span className="text-slate-200 font-medium">View Code</span>
+                      </motion.a>
+                    )}
                     {selectedProject.liveUrl && (
                       <motion.a
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         href={selectedProject.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="button-secondary flex items-center justify-center space-x-2"
+                        className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-colors w-full sm:w-auto justify-center"
                       >
-                        <ExternalLink size={20} />
-                        <span>Live Demo</span>
+                        <ExternalLink size={16} />
+                        <span className="font-medium">Live Demo</span>
                       </motion.a>
                     )}
                   </div>

@@ -15,9 +15,46 @@ const Skills: React.FC = () => {
     { id: 'tools', name: 'Tools', icon: Settings },
   ];
 
-  const filteredSkills = activeCategory === 'all' 
-    ? skills 
-    : skills.filter(skill => skill.category === activeCategory);
+  // Improved filtering logic with better organization
+  const getFilteredSkills = () => {
+    switch (activeCategory) {
+      case 'all':
+        return skills;
+      case 'frontend':
+        return skills.filter(skill => skill.category === 'frontend');
+      case 'backend':
+        return skills.filter(skill => skill.category === 'backend');
+      case 'ai':
+        return skills.filter(skill => skill.category === 'ai');
+      case 'embedded':
+        return skills.filter(skill => skill.category === 'embedded');
+      case 'tools':
+        return skills.filter(skill => skill.category === 'tools');
+      default:
+        return skills;
+    }
+  };
+
+  const getSkillCount = (categoryId: string) => {
+    switch (categoryId) {
+      case 'all':
+        return skills.length;
+      case 'frontend':
+        return skills.filter(skill => skill.category === 'frontend').length;
+      case 'backend':
+        return skills.filter(skill => skill.category === 'backend').length;
+      case 'ai':
+        return skills.filter(skill => skill.category === 'ai').length;
+      case 'embedded':
+        return skills.filter(skill => skill.category === 'embedded').length;
+      case 'tools':
+        return skills.filter(skill => skill.category === 'tools').length;
+      default:
+        return 0;
+    }
+  };
+
+  const filteredSkills = getFilteredSkills();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -41,7 +78,7 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="section-padding">
+    <section id="skills" className="section-padding bg-slate-800/50">
       <div className="container-custom">
         {/* Header */}
         <motion.div
@@ -49,12 +86,12 @@ const Skills: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mobile-margin"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+          <h2 className="mobile-text-4xl sm:text-5xl font-bold mb-4">
             My <span className="gradient-text">Skills</span>
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="mobile-text-lg text-slate-200 max-w-2xl mx-auto px-4">
             A comprehensive overview of my technical skills and expertise across various technologies and domains.
           </p>
         </motion.div>
@@ -65,24 +102,27 @@ const Skills: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
+          className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12 px-4"
         >
           {categories.map((category) => {
             const Icon = category.icon;
+            const skillCount = getSkillCount(category.id);
+            
             return (
               <motion.button
                 key={category.id}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveCategory(category.id)}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                className={`flex items-center space-x-2 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base ${
                   activeCategory === category.id
-                    ? 'bg-primary-500 text-white shadow-lg'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
+                    : 'bg-slate-700/80 text-slate-200 hover:bg-slate-600/80 border border-slate-600/50'
                 }`}
               >
-                <Icon size={20} />
+                <Icon size={18} className="sm:w-5 sm:h-5" />
                 <span>{category.name}</span>
+                <span className="ml-1 text-xs opacity-75">({skillCount})</span>
               </motion.button>
             );
           })}
@@ -90,54 +130,64 @@ const Skills: React.FC = () => {
 
         {/* Skills Grid */}
         <motion.div
+          key={activeCategory} // Add key to force re-render when filter changes
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4"
         >
-          {filteredSkills.map((skill, index) => (
-            <motion.div
-              key={skill.name}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
-            >
-              {/* Skill Header */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
-                    <Code className="w-5 h-5 text-white" />
+          {filteredSkills.length > 0 ? (
+            filteredSkills.map((skill, index) => (
+              <motion.div
+                key={skill.name}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="bg-slate-700/80 backdrop-blur-sm rounded-xl mobile-padding shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-600/50 hover:border-purple-500/50"
+              >
+                {/* Skill Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center shadow-lg">
+                      <Code className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-white text-sm sm:text-base">
+                      {skill.name}
+                    </h3>
                   </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
-                    {skill.name}
-                  </h3>
+                  <span className="text-sm font-medium text-purple-400">
+                    {skill.level}%
+                  </span>
                 </div>
-                <span className="text-sm font-medium text-primary-500">
-                  {skill.level}%
-                </span>
-              </div>
 
-              {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    transition={{ duration: 1, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="h-2 gradient-bg rounded-full"
-                  />
+                {/* Progress Bar */}
+                <div className="mb-4">
+                  <div className="w-full bg-slate-600/50 rounded-full h-2">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.level}%` }}
+                      transition={{ duration: 1, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="h-2 gradient-bg rounded-full"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Skill Level Indicator */}
-              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>Beginner</span>
-                <span>Expert</span>
-              </div>
+                {/* Skill Level Indicator */}
+                <div className="flex items-center justify-between text-xs sm:text-sm text-slate-400">
+                  <span>Beginner</span>
+                  <span>Expert</span>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="col-span-full text-center py-12"
+            >
+              <p className="text-slate-400 text-lg">No skills found for this category.</p>
             </motion.div>
-          ))}
+          )}
         </motion.div>
 
         {/* Skills Summary */}
@@ -146,46 +196,46 @@ const Skills: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="mt-20 bg-gradient-to-r from-primary-50 to-purple-50 dark:from-gray-800 dark:to-purple-900 rounded-2xl p-8 lg:p-12"
+          className="mt-16 sm:mt-20 bg-slate-700/80 backdrop-blur-sm rounded-2xl mobile-padding border border-slate-600/50"
         >
-          <div className="grid lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-text mb-2">
+              <div className="mobile-text-2xl sm:text-3xl font-bold gradient-text mb-2">
                 {skills.filter(s => s.category === 'frontend').length}
               </div>
-              <div className="text-gray-600 dark:text-gray-400 font-medium">
+              <div className="text-slate-200 font-medium text-sm sm:text-base">
                 Frontend Technologies
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-text mb-2">
+              <div className="mobile-text-2xl sm:text-3xl font-bold gradient-text mb-2">
                 {skills.filter(s => s.category === 'backend').length}
               </div>
-              <div className="text-gray-600 dark:text-gray-400 font-medium">
+              <div className="text-slate-200 font-medium text-sm sm:text-base">
                 Backend Technologies
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-text mb-2">
+              <div className="mobile-text-2xl sm:text-3xl font-bold gradient-text mb-2">
                 {skills.filter(s => s.category === 'ai').length}
               </div>
-              <div className="text-gray-600 dark:text-gray-400 font-medium">
+              <div className="text-slate-200 font-medium text-sm sm:text-base">
                 AI & ML Skills
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-text mb-2">
+              <div className="mobile-text-2xl sm:text-3xl font-bold gradient-text mb-2">
                 {skills.filter(s => s.category === 'embedded').length}
               </div>
-              <div className="text-gray-600 dark:text-gray-400 font-medium">
+              <div className="text-slate-200 font-medium text-sm sm:text-base">
                 Embedded Systems
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold gradient-text mb-2">
+            <div className="text-center col-span-2 lg:col-span-1">
+              <div className="mobile-text-2xl sm:text-3xl font-bold gradient-text mb-2">
                 {skills.filter(s => s.category === 'tools').length}
               </div>
-              <div className="text-gray-600 dark:text-gray-400 font-medium">
+              <div className="text-slate-200 font-medium text-sm sm:text-base">
                 Development Tools
               </div>
             </div>
@@ -198,9 +248,9 @@ const Skills: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true }}
-          className="mt-12 text-center"
+          className="mt-12 text-center px-4"
         >
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-slate-200 max-w-2xl mx-auto mobile-text-base">
             I'm constantly learning and expanding my skill set to stay up-to-date with the latest technologies in AI, web development, and embedded systems.
           </p>
         </motion.div>

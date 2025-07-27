@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg'
+          ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-slate-700/20'
           : 'bg-transparent'
       }`}
     >
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => scrollToSection(item.href)}
-                className="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 font-medium transition-colors duration-200"
+                className="text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors duration-200"
               >
                 {item.name}
               </motion.button>
@@ -82,10 +82,14 @@ const Navbar: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200"
               aria-label="Toggle dark mode"
             >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {darkMode ? (
+                <Sun size={20} className="text-slate-700 dark:text-yellow-400" />
+              ) : (
+                <Moon size={20} className="text-slate-700 dark:text-slate-200" />
+              )}
             </motion.button>
             
             <motion.a
@@ -105,10 +109,14 @@ const Navbar: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            className="md:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? (
+              <X size={24} className="text-slate-700 dark:text-slate-200" />
+            ) : (
+              <Menu size={24} className="text-slate-700 dark:text-slate-200" />
+            )}
           </motion.button>
         </div>
 
@@ -119,7 +127,7 @@ const Navbar: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700"
+              className="md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200/20 dark:border-slate-700/20"
             >
               <div className="px-4 py-4 space-y-4">
                 {navItems.map((item) => (
@@ -127,21 +135,25 @@ const Navbar: React.FC = () => {
                     key={item.name}
                     whileHover={{ x: 10 }}
                     onClick={() => scrollToSection(item.href)}
-                    className="block w-full text-left text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 font-medium transition-colors duration-200"
+                    className="block w-full text-left text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors duration-200"
                   >
                     {item.name}
                   </motion.button>
                 ))}
                 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center space-x-4 pt-4 border-t border-slate-200/20 dark:border-slate-700/20">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={toggleDarkMode}
-                    className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+                    className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200"
                     aria-label="Toggle dark mode"
                   >
-                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                    {darkMode ? (
+                      <Sun size={20} className="text-slate-700 dark:text-yellow-400" />
+                    ) : (
+                      <Moon size={20} className="text-slate-700 dark:text-slate-200" />
+                    )}
                   </motion.button>
                   
                   <motion.a

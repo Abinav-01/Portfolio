@@ -38,16 +38,23 @@ export interface Education {
 }
 
 export const personalInfo = {
-  name: "Abinav S",
-  title: "AI Enthusiast | Full Stack Developer | Dual Degree Holder",
-  subtitle: "Real-World Tech Builder",
-  email: "abinavsankar01@gmail.com",
-  phone: "+91 78458 93358",
-  location: "Chennai, India",
-  about: `I'm an ambitious dual-degree undergraduate who recently completed a research internship in Generative AI. With strong foundations in both Computer Science and Data Science, I specialize in building impactful real-world solutions, from AI-powered surveillance systems to quiz platforms and embedded microcontroller projects.
+  name: 'Abinav S',
+  title: 'Full Stack Developer & AI/ML Engineer',
+  subtitle: 'Passionate about creating innovative solutions that bridge the gap between AI/ML and web development. Currently pursuing dual degrees in Computer Science and Data Science.',
+  about: `I'm a passionate Full Stack Developer and AI/ML Engineer with a unique dual-degree background from VIT (B.Tech CSE) and IIT Madras (B.Sc Data Science). My journey in technology has been driven by a deep curiosity for artificial intelligence and its practical applications.
 
-My interests span across AI, Backend Systems, Full Stack Development, and Embedded Tech. I'm passionate about creating innovative solutions that make a real difference in the world.`,
-  resumeUrl: "/resume.pdf"
+Currently working as a Research Intern in Generative AI, I've developed expertise in building intelligent systems that can understand and generate human-like content. My technical skills span across modern web technologies, with Vue.js and Flask being my go-to stack for creating robust, scalable applications.
+
+I believe in the power of AI to transform industries and improve lives. My projects reflect this belief - from the Guardian Eye surveillance system that combines YOLO and DeepSORT for intelligent object tracking, to innovative web applications that leverage machine learning for enhanced user experiences.
+
+When I'm not coding or exploring AI, you'll find me diving into embedded systems projects, contributing to open-source initiatives, or sharing knowledge with the developer community. I'm always excited to collaborate on projects that push the boundaries of what's possible with technology.`,
+  email: 'abinavsankar01@gmail.com',
+  phone: '+91 7845893358',
+  location: 'Chennai, Tamil Nadu, India',
+  resumeUrl: '/resume.pdf', // Updated to point to PDF in public folder
+  github: 'https://github.com/Abinav-01',
+  linkedin: 'https://linkedin.com/in/abinav-s',
+  twitter: 'https://twitter.com/abinav_s'
 };
 
 export const education: Education[] = [

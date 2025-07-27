@@ -210,7 +210,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-purple-200 mb-4"
+            className="text-lg text-purple-200 mb-4 font-medium"
           >
             Hello, I'm
           </motion.p>
@@ -220,7 +220,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6"
+            className="mobile-text-5xl sm:text-6xl lg:text-7xl font-bold mb-6"
           >
             <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
               {personalInfo.name}
@@ -232,7 +232,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-200 mb-4"
+            className="mobile-text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-200 mb-4"
           >
             {personalInfo.title}
           </motion.h2>
@@ -242,9 +242,9 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-lg sm:text-xl lg:text-2xl font-medium text-blue-300 mb-8 h-8 flex items-center justify-center"
+            className="mobile-text-lg sm:text-xl lg:text-2xl font-medium text-blue-300 mb-8 h-8 flex items-center justify-center"
           >
-            <span className="min-w-[400px] text-left">
+            <span className="min-w-[280px] sm:min-w-[400px] text-left">
               {currentText}
               <span className="animate-pulse text-purple-300">|</span>
             </span>
@@ -255,7 +255,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed"
+            className="mobile-text-lg sm:text-xl text-slate-200 mb-12 max-w-2xl mx-auto leading-relaxed px-4"
           >
             {personalInfo.subtitle}
           </motion.p>
@@ -265,13 +265,13 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 px-4"
           >
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               href="#contact"
-              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 flex items-center space-x-2 group"
+              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 flex items-center justify-center space-x-2 group"
             >
               <span>Get In Touch</span>
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -282,7 +282,7 @@ const Hero: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               href={personalInfo.resumeUrl}
               download
-              className="px-8 py-4 border-2 border-purple-400 text-purple-300 hover:bg-purple-400 hover:text-white font-semibold rounded-lg transition-all duration-300 flex items-center space-x-2"
+              className="w-full sm:w-auto px-8 py-4 border-2 border-purple-400 text-purple-300 hover:bg-purple-400 hover:text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center space-x-2"
             >
               <Download size={20} />
               <span>Download Resume</span>
@@ -294,25 +294,27 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
-            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 text-gray-300"
+            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 text-slate-200 px-4"
           >
             <a
               href={`mailto:${personalInfo.email}`}
-              className="flex items-center space-x-2 hover:text-purple-300 transition-colors"
+              className="flex items-center space-x-2 hover:text-purple-300 transition-colors text-sm sm:text-base"
             >
               <Mail size={20} />
-              <span>{personalInfo.email}</span>
+              <span className="hidden sm:inline">{personalInfo.email}</span>
+              <span className="sm:hidden">Email</span>
             </a>
             <span className="hidden sm:block text-purple-400">•</span>
             <a
               href={`tel:${personalInfo.phone}`}
-              className="flex items-center space-x-2 hover:text-purple-300 transition-colors"
+              className="flex items-center space-x-2 hover:text-purple-300 transition-colors text-sm sm:text-base"
             >
               <Phone size={20} />
-              <span>{personalInfo.phone}</span>
+              <span className="hidden sm:inline">{personalInfo.phone}</span>
+              <span className="sm:hidden">Phone</span>
             </a>
             <span className="hidden sm:block text-purple-400">•</span>
-            <span>{personalInfo.location}</span>
+            <span className="text-sm sm:text-base">{personalInfo.location}</span>
           </motion.div>
         </motion.div>
       </div>
